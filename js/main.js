@@ -34,22 +34,17 @@ function initCSS3DUI() {
 }
 
 function onClickEvent(e) {
-	var pos = engine.camera.getWorldDirection();
-	var position = {
-		x: pos.x,
-		y: pos.y,
-		z: pos.z
-	};
-	var target = {
-		x: e.target.nextPoint.x,
-		y: e.target.nextPoint.y,
-		z: e.target.nextPoint.z
-	};
+	var position = engine.camera.getWorldDirection();
 
-	new TWEEN.Tween(position).to(target, 1000).easing(TWEEN.Easing.Circular.Out).onUpdate(function(a) {
-		engine.camera.lookAt(position);
+	new TWEEN.Tween(position).to(e.target.nextPoint, 1000).easing(TWEEN.Easing.Circular.Out).onUpdate(function(a) {
+		var target = engine.controls.target;
+		var vec = new THREE.Vector3().subVectors( target, position ).normalize();
+		var pos = vec.multiplyScalar( engine.camera.position.distanceTo( target ) ).add( target );
+		engine.camera.position.copy( pos );
+		engine.camera.lookAt( engine.controls.target );
+	}).onComplete(function(){
+		//engine.controls.update();
 	}).start();
-
 }
 
 function makeSkyBox() {
