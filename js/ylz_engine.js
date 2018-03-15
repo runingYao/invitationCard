@@ -36,7 +36,7 @@ Engine = function(){
 		
 		/**透视相机*/
 		this.camera = new THREE.PerspectiveCamera( 90, this.containerWidth / this.containerHeight, 0.1, 100 );
-		this.camera.position.z = 0.01;
+		this.camera.position.z = 0.001;
 		
 		/**全局光照*/
 		var ambient = new THREE.AmbientLight(0xFFFFFF, 1);
