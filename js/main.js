@@ -35,15 +35,13 @@ function initCSS3DUI() {
 
 function onClickEvent(e) {
 	var position = engine.camera.getWorldDirection();
-
 	new TWEEN.Tween(position).to(e.target.nextPoint, 1000).easing(TWEEN.Easing.Circular.Out).onUpdate(function(a) {
 		var target = engine.controls.target;
 		var vec = new THREE.Vector3().subVectors( target, position ).normalize();
 		var pos = vec.multiplyScalar( engine.camera.position.distanceTo( target ) ).add( target );
 		engine.camera.position.copy( pos );
-		engine.camera.lookAt( engine.controls.target );
+		engine.camera.lookAt( target );
 	}).onComplete(function(){
-		//engine.controls.update();
 	}).start();
 }
 
