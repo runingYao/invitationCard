@@ -21,22 +21,22 @@ Engine = function(){
 			antialias: true
 		});
 		this.renderer.setPixelRatio( 1 );//this.containerHeight / this.containerWidth
-		this.renderer.setSize( this.containerWidth, this.containerHeight );
+		this.renderer.setSize( window.innerWidth, window.innerHeight );
 		this.container.appendChild( this.renderer.domElement );
 		
 		this.scene = new THREE.Scene();
 		
 		/**CSS3D渲染器*/
         this.cssrenderer = new THREE.CSS3DRenderer();
-        this.cssrenderer.setSize(this.containerWidth, this.containerHeight);
+        this.cssrenderer.setSize(window.innerWidth, window.innerHeight);
         this.cssrenderer.domElement.style.position = 'absolute';
         this.cssrenderer.domElement.style.top = 0;
         this.container.appendChild(this.cssrenderer.domElement);
         this.cssscene = new THREE.Scene();
 		
 		/**透视相机*/
-		this.camera = new THREE.PerspectiveCamera( 90, this.containerWidth / this.containerHeight, 0.1, 100 );
-		this.camera.position.z = 0.001;
+		this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+		this.camera.position.z = 0.00001;
 		
 		/**全局光照*/
 		var ambient = new THREE.AmbientLight(0xFFFFFF, 1);
@@ -44,7 +44,7 @@ Engine = function(){
 		
 		/**控制器*/
 		this.controls = new THREE.OrbitControls( this.camera );
-		//this.controls.enableZoom = false;
+		this.controls.enableZoom = false;
 		this.controls.enablePan = false;
 		
 		window.addEventListener( 'resize', onWindowResize, false );
