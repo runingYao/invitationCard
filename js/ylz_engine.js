@@ -226,7 +226,7 @@ Engine = function(){
             y: numAll.numy,
             z: numAll.numz
         });*/
-        this.deviceControls.update();
+        scope.deviceControls.update();
 		scope.renderer.render(scope.scene, scope.camera);
 		scope.cssrenderer.render(scope.cssscene, scope.camera);
 	}
