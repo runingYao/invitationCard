@@ -1,5 +1,5 @@
 var app = {engine: new Engine(), elements: [], texturePath: "img/bg.jpg", tilesNum: 6};
-app.initPages = function (textures) {
+app.initPages = function (texture) {
 
 /*    var materials = [];
 
@@ -19,7 +19,7 @@ app.initPages = function (textures) {
     geometry.scale(-1, 1, 1);
 
     var material = new THREE.MeshBasicMaterial({
-        map: new THREE.TextureLoader().load(app.texturePath)
+        map: texture
     });
 
     var mesh = new THREE.Mesh(geometry, material);
@@ -71,18 +71,15 @@ app.initPages = function (textures) {
 
 app.loader = function () {
     this.engine.init();
-    var textures = [];
 
-    for (var i = 0; i < this.tilesNum; i++) {
-
-        textures[i] = new THREE.Texture();
-
-    }
 
     var imageObj = new Image();
 
     imageObj.onload = function () {
-        app.initPages(textures);
+        var texture = new THREE.Texture();
+        texture.image = this;
+        texture.needsUpdate = true;
+        app.initPages(texture);
 
         //var canvas, context;
         //var tileWidth = imageObj.height;
