@@ -29,19 +29,22 @@ app.initPages = function (textures) {
     this.elements[0] = $('<button type="button" name = "forward">跳到下一个位置</button>')[0];
     this.elements[0].position = new THREE.Vector3(0, 0.3, -0.49);
     this.elements[0].rotation = new THREE.Euler(0, 0, 0);
+    this.elements[0].num = 1;
 
     this.elements[1] = $('<button type="button" name = "right">跳到下一个位置</button>')[0];
     this.elements[1].position = new THREE.Vector3(0.49, 0.3, 0);
     this.elements[1].rotation = new THREE.Euler(0, Math.PI / 180 * -90, 0);
-
+    this.elements[1].num = 2;
 
     this.elements[2] = $('<button type="button" name = "back">跳到下一个位置</button>')[0];
     this.elements[2].position = new THREE.Vector3(0, 0.3, 0.49);
     this.elements[2].rotation = new THREE.Euler(0, Math.PI, 0);
+    this.elements[2].num = 3;
 
     this.elements[3] = $('<button type="button" name = "left">跳到下一个位置</button>')[0];
     this.elements[3].position = new THREE.Vector3(-0.49, 0.3, 0);
     this.elements[3].rotation = new THREE.Euler(0, Math.PI / 180 * 90, 0);
+    this.elements[3].num = 4;
 
 
     for (var i = 0; i < this.elements.length; i++) {
@@ -52,9 +55,24 @@ app.initPages = function (textures) {
     }
 
     function onClickEvent(e) {
+
+/*        var correct = choosen[num - 1];
+        choosenSure[num - 1] = choosen[num - 1];
+        window._hmt && _hmt.push(['_trackEvent', '选定定第'+num+'道题', '选定第'+choosen[num - 1]+'个选项']);
+        var score = 0;
+        for(var i = num - 1; i < 10; i++){
+            if(choosenSure[i % 5] == 0){
+                new TWEEN.Tween(cameraSetting).to({
+                    lon: quesDeg[i % 5][0],
+                    lat: quesDeg[i % 5][1],
+                }, 500)
+                    .easing(TWEEN.Easing.Circular.Out).start();
+                break;
+            }
+        }*/
         var position = app.engine.camera.getWorldDirection();
         new TWEEN.Tween(position).to(e.target.nextPoint, 1000).easing(TWEEN.Easing.Circular.Out).onUpdate(function (a) {
-            var target = app.engine.controls.target;
+            var target =  new THREE.Vector3();//app.engine.controls.target;
             var vec = new THREE.Vector3().subVectors(target, position).normalize();
             var pos = vec.multiplyScalar(app.engine.camera.position.distanceTo(target)).add(target);
             app.engine.camera.position.copy(pos);

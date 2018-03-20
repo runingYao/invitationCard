@@ -1,4 +1,19 @@
 Engine = function(){
+    var numAll = {
+        numx: null,
+        numy: null,
+        numz: null
+    };
+    var cameraSetting = {
+        lon: 10,
+        lat: 0,
+    };
+    var onPointerDownPointerX;
+    var onPointerDownPointerY;
+    var onPointerDownLon;
+    var onPointerDownLat;
+    var mouse = new THREE.Vector2(), isUserInteracting = false, phi = 0, theta = 0;
+
 	this.cssObjScale = .003;
 	var scope = this;
 	this.init = function(container){
@@ -47,11 +62,128 @@ Engine = function(){
 		this.controls = new THREE.OrbitControls( this.camera );
 		this.controls.enableZoom = false;
 		this.controls.enablePan = false;
+
+        this.DeviceControls = new THREE.DeviceOrientationControls( this.camera );
 		
-		window.addEventListener( 'resize', onWindowResize, false );
+        //window.addEventListener( 'resize', onWindowResize, false );
+        //document.addEventListener('touchstart', onDocumentMouseDown, false);
+        //document.addEventListener('touchend', onDocumentMouseUp, false);
+        //document.addEventListener('touchmove', onDocumentTouchMove, false);
+        //initDeviceorientation();
 		animate();
 	}
-	
+
+    function initDeviceorientation() {
+        if ( !window.DeviceOrientationEvent) return;//!app.common.browser.isMobile ||
+
+        var cameraDatas = [];
+
+        var tX, tY, dY = 0;
+        var body = $('body');
+        var s = body.scrollTop();
+        var isEnd = true;
+        var count = 0;
+
+        // app.isUpdate = true;
+
+        window.addEventListener('deviceorientation', deviceOrientationHandler, false);
+
+        function deviceOrientationHandler(eventData) {
+            if (isUserInteracting) return;
+            if (!app.isUpdate) return;
+
+            var beta = eventData.beta; // x
+            var alpha = eventData.alpha; //z
+            var gama = eventData.gamma;
+
+            var deltaX = 0,
+                deltaY = 0;
+            var newX = -alpha;
+            var newY = Math.abs(window.orientation) == 90 ? -(90 - gama) : -(90 - beta);
+            if (typeof(tX) != 'undefined') deltaX = newX - tX;
+            if (typeof(tY) != 'undefined') deltaY = newY - tY;
+            tX = newX;
+            tY = newY;
+            //if(Math.abs(deltaX)>5||Math.abs(deltaY)>5) return;
+            cameraDatas.push([deltaX, deltaY]);
+
+            //设置最大缓存的坐标值
+            var maxLength = 4; // 2的倍数（最小值为4）
+            if (cameraDatas.length > maxLength) cameraDatas.shift();
+            //else if(cameraDatas.length<maxLength) return;
+            var totalX = 0,
+                totalY = 0,
+                length = cameraDatas.length;
+            if (length > 3) {
+                //计算平均值
+                for (var i = 0; i < length; i++) {
+                    totalX += cameraDatas[i][0];
+                    //totalY+=cameraDatas[i][1];
+                }
+                var averageX = totalX / length;
+                var averageY = totalY / length;
+                //计算X偏差值
+                var arr = [];
+                for (var i = 0; i < length; i++) {
+                    var deltaX = Math.abs(averageX - cameraDatas[i][0]);
+                    arr.push(deltaX);
+                }
+                //获得最大值的键名
+                var max = Math.max(null, arr);
+                for (var i = 0; i < length; i++) {
+                    if (arr[i] == max) {
+                        //去除偏差值最大的数据
+                        cameraDatas = cameraDatas.slice(0, i).concat(cameraDatas.slice(i + 1, cameraDatas.length));
+                        break;
+                    }
+                }
+            }
+
+            totalX = 0, totalY = 0;
+            for (var i = 0; i < length; i++) {
+                var data = cameraDatas[i];
+                totalX += data[0];
+                totalY += data[1];
+            }
+            length = cameraDatas.length;
+
+            var averageX = totalX / length;
+            var averageY = totalY / length;
+            if (Math.abs(averageX) > 10 || Math.abs(averageY) > 10) return;
+            cameraSetting.lon += averageX;
+            cameraSetting.lat += averageY;
+        }
+    }
+
+    function onDocumentMouseDown(e) {
+        event.preventDefault();
+        isUserInteracting = true;
+        onPointerDownPointerX = e.touches[0].clientX;
+        onPointerDownPointerY = e.touches[0].clientY;
+        onPointerDownLon = cameraSetting.lon;
+        onPointerDownLat = cameraSetting.lat;
+        mouse.x = (e.touches[0].clientX / scope.renderer.domElement.clientWidth) * 2 - 1;
+        mouse.y = -(e.touches[0].clientY / scope.renderer.domElement.clientHeight) * 2 + 1;
+    }
+
+    function onDocumentMouseUp(e) {
+        isUserInteracting = false;
+    }
+
+    function onDocumentTouchMove(e) {
+        //if(app.currentPage !== 2){
+        //    return;
+        //}
+        if (e.touches.length == 1 ) {//&& clickFlag == 0
+
+            e.preventDefault();
+
+            cameraSetting.lon = (onPointerDownPointerX - e.touches[0].pageX) * 0.5 + onPointerDownLon;
+            cameraSetting.lat = (e.touches[0].pageY - onPointerDownPointerY) * 0.5 + onPointerDownLat;
+        }
+
+    }
+
 	/**
 	 * 创建
 	 */
@@ -81,6 +213,19 @@ Engine = function(){
 	}
 
 	function render() {
+        cameraSetting.lat = Math.max(-35, Math.min(35, cameraSetting.lat));
+        phi = THREE.Math.degToRad(90 - cameraSetting.lat);
+        theta = THREE.Math.degToRad(cameraSetting.lon);
+
+        numAll.numx = 500 * Math.sin(phi) * Math.cos(theta);
+        numAll.numy = 500 * Math.cos(phi);
+        numAll.numz = 500 * Math.sin(phi) * Math.sin(theta);
+
+/*        scope.camera.lookAt({
+            x: numAll.numx,
+            y: numAll.numy,
+            z: numAll.numz
+        });*/
 		scope.renderer.render(scope.scene, scope.camera);
 		scope.cssrenderer.render(scope.cssscene, scope.camera);
 	}
