@@ -20,7 +20,7 @@ Engine = function(){
 		this.renderer = new THREE.WebGLRenderer({
 			antialias: true
 		});
-		this.renderer.setPixelRatio( window.devicePixelRatio );//this.containerHeight / this.containerWidth
+		this.renderer.setPixelRatio( 1 );//this.containerHeight / this.containerWidth
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 		this.container.appendChild( this.renderer.domElement );
 		
