@@ -59,9 +59,9 @@ Engine = function(){
 		this.scene.add(ambient);
 		
 		/**控制器*/
-		//this.controls = new THREE.OrbitControls( this.camera );
-		//this.controls.enableZoom = false;
-		//this.controls.enablePan = false;
+		this.controls = new THREE.OrbitControls( this.camera );
+		this.controls.enableZoom = false;
+		this.controls.enablePan = false;
 
         this.deviceControls = new THREE.DeviceOrientationControls( this.camera );
 		
