@@ -63,7 +63,7 @@ Engine = function(){
 		//this.controls.enableZoom = false;
 		//this.controls.enablePan = false;
 
-        this.DeviceControls = new THREE.DeviceOrientationControls( this.camera );
+        this.deviceControls = new THREE.DeviceOrientationControls( this.camera );
 		
         //window.addEventListener( 'resize', onWindowResize, false );
         //document.addEventListener('touchstart', onDocumentMouseDown, false);
@@ -226,6 +226,7 @@ Engine = function(){
             y: numAll.numy,
             z: numAll.numz
         });*/
+        this.deviceControls.update();
 		scope.renderer.render(scope.scene, scope.camera);
 		scope.cssrenderer.render(scope.cssscene, scope.camera);
 	}
