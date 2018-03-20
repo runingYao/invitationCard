@@ -59,17 +59,15 @@ Engine = function(){
 		this.scene.add(ambient);
 		
 		/**控制器*/
-		this.controls = new THREE.OrbitControls( this.camera );
-		this.controls.enableZoom = false;
-		this.controls.enablePan = false;
-
-        this.deviceControls = new THREE.DeviceOrientationControls( this.camera );
+		//this.controls = new THREE.OrbitControls( this.camera );
+		//this.controls.enableZoom = false;
+		//this.controls.enablePan = false;
 		
-        //window.addEventListener( 'resize', onWindowResize, false );
-        //document.addEventListener('touchstart', onDocumentMouseDown, false);
-        //document.addEventListener('touchend', onDocumentMouseUp, false);
-        //document.addEventListener('touchmove', onDocumentTouchMove, false);
-        //initDeviceorientation();
+		window.addEventListener( 'resize', onWindowResize, false );
+        document.addEventListener('touchstart', onDocumentMouseDown, false);
+        document.addEventListener('touchend', onDocumentMouseUp, false);
+        document.addEventListener('touchmove', onDocumentTouchMove, false);
+        initDeviceorientation();
 		animate();
 	}
 
@@ -221,12 +219,11 @@ Engine = function(){
         numAll.numy = 500 * Math.cos(phi);
         numAll.numz = 500 * Math.sin(phi) * Math.sin(theta);
 
-/*        scope.camera.lookAt({
+        scope.camera.lookAt({
             x: numAll.numx,
             y: numAll.numy,
             z: numAll.numz
-        });*/
-        scope.deviceControls.update();
+        })
 		scope.renderer.render(scope.scene, scope.camera);
 		scope.cssrenderer.render(scope.cssscene, scope.camera);
 	}

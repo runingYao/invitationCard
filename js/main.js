@@ -56,21 +56,8 @@ app.initPages = function (textures) {
 
     function onClickEvent(e) {
 
-/*        var correct = choosen[num - 1];
-        choosenSure[num - 1] = choosen[num - 1];
-        window._hmt && _hmt.push(['_trackEvent', '选定定第'+num+'道题', '选定第'+choosen[num - 1]+'个选项']);
-        var score = 0;
-        for(var i = num - 1; i < 10; i++){
-            if(choosenSure[i % 5] == 0){
-                new TWEEN.Tween(cameraSetting).to({
-                    lon: quesDeg[i % 5][0],
-                    lat: quesDeg[i % 5][1],
-                }, 500)
-                    .easing(TWEEN.Easing.Circular.Out).start();
-                break;
-            }
-        }*/
-        var position = app.engine.camera.getWorldDirection();
+
+/*        var position = app.engine.camera.getWorldDirection();
         new TWEEN.Tween(position).to(e.target.nextPoint, 1000).easing(TWEEN.Easing.Circular.Out).onUpdate(function (a) {
             var target =  new THREE.Vector3();//app.engine.controls.target;
             var vec = new THREE.Vector3().subVectors(target, position).normalize();
@@ -78,7 +65,7 @@ app.initPages = function (textures) {
             app.engine.camera.position.copy(pos);
             app.engine.camera.lookAt(target);
         }).onComplete(function () {
-        }).start();
+        }).start();*/
     }
 }
 
