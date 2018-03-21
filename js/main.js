@@ -3,12 +3,12 @@ app.initPages = function (texture) {
     var choosenSure = Array(10).fill(0);
     var choosen = Array(10).fill(0);
     var INTERSECTED;
-    var quesDeg =[[-265,-22],[-230,2.8],[-200,8.7],[-164,-4.3],[-127,-27.8],[-91,17.45],[-58,0.75],[-22,15],[14,-13.8],[49,-1.92]];
-    var position = [[-1,-4,10],[-5.8,1,8.14],[-9.45,3,3.25],[-9.58,-1,-2.84],[-6.15,-4,-7.88],[-0.436,3,-9.99],[5.44,0,-8.38],[9.30,3,-3.66],[9.70,-3,2.41],[6.49,0,7.6]];
+    var quesDeg =[[-265,-22],[-230,2.8],[-200,8.7],[-164,-4.3],[-127,-27.8],[-91,17.45],[-58,0.75],[-23,15],[12,-13.8],[47,-1.92]];
+    var position = [[-1,-6,10],[-5.8,6,8.14],[-9.45,-2,3.25],[-9.58,6,-2.84],[-6.15,-6,-7.88],[-0.436,2,-9.99],[5.44,0,-6.38],[9.30,-8,-3.66],[9.70,0,2.41],[6.49,-8,7.6]];
 
 
     var geometry = new THREE.SphereGeometry(500, 120, 40);
-    geometry.scale(-1, 1, 1);
+    geometry.scale(-1.3, 1, 1);
 
     var material = new THREE.MeshBasicMaterial({
         map: texture
@@ -19,10 +19,7 @@ app.initPages = function (texture) {
     this.engine.scene.add(mesh);
     for(var j = 0; j < 10; j++){
         // var ele = $('<img src="img/question10.png" title="问题'+(j+1)+'">')[0];
-        var ele =  $('<div> 问题' +(j+1)+
-            '<br><input type="radio" name="colors" id="red">选项1<br>' +
-            '<input type="radio" name="colors" id="red">选项2<br>' +
-            '<input type="radio" name="colors" id="red">选项三<br></div>')[0];
+        var ele =  $('<div style="font-size: 20px;color: white">问题'+(j+1)+'<br><img src="img/question10.png" alt=""></div>')[0];
         ele.num = j+1;
         ele.angle = 360 - j * 35.5;console.log(ele.angle);
         var y = Math.floor(Math.random()*(4-(-4)+1)+-4);
@@ -44,7 +41,7 @@ app.initPages = function (texture) {
 
     function onClickEvent(e) {
 
-        var num = e.target.num;
+        var num = e.currentTarget.num;
         choosen[num-1] = num;
         var correct = choosen[num - 1];
         choosenSure[num - 1] = choosen[num - 1];
