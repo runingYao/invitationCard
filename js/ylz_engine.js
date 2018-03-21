@@ -14,7 +14,7 @@ Engine = function(){
     var onPointerDownLat;
     var mouse = new THREE.Vector2(), isUserInteracting = false, phi = 0, theta = 0;
 
-    this.cssObjScale = .06;//.009
+    this.cssObjScale = .018;//.06
     this.cameraSetting = cameraSetting;
 	var scope = this;
 	this.init = function(container){
