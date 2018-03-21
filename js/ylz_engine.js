@@ -14,7 +14,8 @@ Engine = function(){
     var onPointerDownLat;
     var mouse = new THREE.Vector2(), isUserInteracting = false, phi = 0, theta = 0;
 
-	this.cssObjScale = .003;
+    this.cssObjScale = .06;//.009
+    this.cameraSetting = cameraSetting;
 	var scope = this;
 	this.init = function(container){
 		
@@ -87,8 +88,8 @@ Engine = function(){
         window.addEventListener('deviceorientation', deviceOrientationHandler, false);
 
         function deviceOrientationHandler(eventData) {
-            if (isUserInteracting) return;
-            if (!app.isUpdate) return;
+            //if (isUserInteracting) return;
+           // if (!app.isUpdate) return;
 
             var beta = eventData.beta; // x
             var alpha = eventData.alpha; //z
@@ -154,7 +155,7 @@ Engine = function(){
     }
 
     function onDocumentMouseDown(e) {
-        event.preventDefault();
+       // event.preventDefault();
         isUserInteracting = true;
         onPointerDownPointerX = e.touches[0].clientX;
         onPointerDownPointerY = e.touches[0].clientY;
@@ -191,8 +192,8 @@ Engine = function(){
         sprite.scale.y = this.cssObjScale;
         if(ele.position != undefined)
         	sprite.position.copy(ele.position);
-        if(ele.rotation != undefined)
-        	sprite.rotation.copy(ele.rotation)
+        //if(ele.rotation != undefined)
+        //	sprite.rotation.copy(ele.rotation)
         scope.cssscene.add(sprite);
         ele.sprite = sprite;
         return sprite;
@@ -211,7 +212,9 @@ Engine = function(){
 	}
 
 	function render() {
+        console.log("lon:"+(cameraSetting.lon)+"   lat:"+cameraSetting.lat);
         cameraSetting.lat = Math.max(-35, Math.min(35, cameraSetting.lat));
+
         phi = THREE.Math.degToRad(90 - cameraSetting.lat);
         theta = THREE.Math.degToRad(cameraSetting.lon);
 
@@ -448,155 +451,3 @@ THREE.CSS3DRenderer = function () {
     };
 
 };
-
-
-    this.setSize = function ( width, height ) {
-
-        _width = width;
-        _height = height;
-
-        _widthHalf = _width / 2;
-        _heightHalf = _height / 2;
-
-        domElement.style.width = width + 'px';
-        domElement.style.height = height + 'px';
-
-        cameraElement.style.width = width + 'px';
-        cameraElement.style.height = height + 'px';
-
-    };
-
-    var epsilon = function ( value ) {
-
-        return Math.abs( value ) < 0.000001 ? 0 : value;
-
-    };
-
-    var getCameraCSSMatrix = function ( matrix ) {
-
-        var elements = matrix.elements;
-
-        return 'matrix3d(' +
-            epsilon( elements[ 0 ] ) + ',' +
-            epsilon( - elements[ 1 ] ) + ',' +
-            epsilon( elements[ 2 ] ) + ',' +
-            epsilon( elements[ 3 ] ) + ',' +
-            epsilon( elements[ 4 ] ) + ',' +
-            epsilon( - elements[ 5 ] ) + ',' +
-            epsilon( elements[ 6 ] ) + ',' +
-            epsilon( elements[ 7 ] ) + ',' +
-            epsilon( elements[ 8 ] ) + ',' +
-            epsilon( - elements[ 9 ] ) + ',' +
-            epsilon( elements[ 10 ] ) + ',' +
-            epsilon( elements[ 11 ] ) + ',' +
-            epsilon( elements[ 12 ] ) + ',' +
-            epsilon( - elements[ 13 ] ) + ',' +
-            epsilon( elements[ 14 ] ) + ',' +
-            epsilon( elements[ 15 ] ) +
-            ')';
-
-    };
-
-    var getObjectCSSMatrix = function ( matrix ) {
-
-        var elements = matrix.elements;
-
-        return 'translate3d(-50%,-50%,0) matrix3d(' +
-            epsilon( elements[ 0 ] ) + ',' +
-            epsilon( elements[ 1 ] ) + ',' +
-            epsilon( elements[ 2 ] ) + ',' +
-            epsilon( elements[ 3 ] ) + ',' +
-            epsilon( - elements[ 4 ] ) + ',' +
-            epsilon( - elements[ 5 ] ) + ',' +
-            epsilon( - elements[ 6 ] ) + ',' +
-            epsilon( - elements[ 7 ] ) + ',' +
-            epsilon( elements[ 8 ] ) + ',' +
-            epsilon( elements[ 9 ] ) + ',' +
-            epsilon( elements[ 10 ] ) + ',' +
-            epsilon( elements[ 11 ] ) + ',' +
-            epsilon( elements[ 12 ] ) + ',' +
-            epsilon( elements[ 13 ] ) + ',' +
-            epsilon( elements[ 14 ] ) + ',' +
-            epsilon( elements[ 15 ] ) +
-            ')';
-
-    };
-
-    var renderObject = function ( object, camera ) {
-
-        if ( object instanceof THREE.CSS3DObject ) {
-
-            var style;
-
-            if ( object instanceof THREE.CSS3DSprite ) {
-
-                // http://swiftcoder.wordpress.com/2008/11/25/constructing-a-billboard-matrix/
-
-                matrix.copy( camera.matrixWorldInverse );
-                matrix.transpose();
-                matrix.copyPosition( object.matrixWorld );
-                matrix.scale( object.scale );
-
-                matrix.elements[ 3 ] = 0;
-                matrix.elements[ 7 ] = 0;
-                matrix.elements[ 11 ] = 0;
-                matrix.elements[ 15 ] = 1;
-
-                style = getObjectCSSMatrix( matrix );
-
-            } else {
-
-                style = getObjectCSSMatrix( object.matrixWorld );
-
-            }
-
-            var element = object.element;
-
-            element.style.WebkitTransform = style;
-            element.style.MozTransform = style;
-            element.style.oTransform = style;
-            element.style.transform = style;
-
-            if ( element.parentNode !== cameraElement ) {
-
-                cameraElement.appendChild( element );
-
-            }
-
-        }
-
-        for ( var i = 0, l = object.children.length; i < l; i ++ ) {
-
-            renderObject( object.children[ i ], camera );
-
-        }
-
-    };
-
-    this.render = function ( scene, camera ) {
-
-        var fov = 0.5 / Math.tan( THREE.Math.degToRad( camera.fov * 0.5 ) ) * _height;
-
-        domElement.style.WebkitPerspective = fov + "px";
-        domElement.style.MozPerspective = fov + "px";
-        domElement.style.oPerspective = fov + "px";
-        domElement.style.perspective = fov + "px";
-
-        scene.updateMatrixWorld();
-
-        if ( camera.parent === undefined ) camera.updateMatrixWorld();
-
-        camera.matrixWorldInverse.getInverse( camera.matrixWorld );
-
-        var style = "translate3d(0,0," + fov + "px)" + getCameraCSSMatrix( camera.matrixWorldInverse ) +
-            " translate3d(" + _widthHalf + "px," + _heightHalf + "px, 0)";
-
-        cameraElement.style.WebkitTransform = style;
-        cameraElement.style.MozTransform = style;
-        cameraElement.style.oTransform = style;
-        cameraElement.style.transform = style;
-
-        renderObject( scene, camera );
-
-    };
-
