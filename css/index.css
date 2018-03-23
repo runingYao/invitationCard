@@ -1,0 +1,221 @@
+html, body {
+/*    background-color: #000;*/
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+
+.card div{
+    width: 510px;
+    position: absolute;
+    left: 80px;
+    top: 80px;
+    font-size: 28px;
+    color: #FFF;
+}
+.card div img{
+    left: 30px;
+    top: 280px;
+}
+.card img{
+    position: absolute;
+
+}
+
+li{
+    list-style:none;
+    line-height: 40px;
+
+}
+input[type=radio]{
+    width: 25px;
+    height: 25px;
+}
+.card ul{
+    padding: 0px;
+}
+*{
+    margin: 0px auto;
+    padding: 0px;
+}
+body{
+    height: 100%;
+}
+li{
+    list-style: none;
+}
+
+.tex li{
+    list-style: none;
+    font-size: 1.5rem;
+    line-height: 3rem;
+    font-family: "微软雅黑";
+    color: aliceblue;
+    font-weight: bold;
+}
+.mix li{
+    list-style: none;
+    font-size: 1.3rem;
+    line-height: 2rem;
+    font-family: "微软雅黑";
+    color: aliceblue;
+    font-weight: bold;
+}
+p{
+    position: absolute;
+    left: 27rem;
+    bottom: 12rem;
+}
+a{
+    position: absolute;
+    left: 26rem;
+    bottom: 33rem;
+}
+.page{
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    left: 0px;
+    top: 0px;
+}
+.beib{
+    position: absolute;
+    left: 19rem;
+    bottom: 47rem;
+}
+.page img {
+    width: 100%;
+    height: 100%;
+}
+.one{
+    position: absolute;
+    left: 7rem;
+    bottom: 25rem;
+}
+.two{
+    position: absolute;
+    left: 10rem;
+    bottom: 11rem;
+}
+.one_four{
+    position: absolute;
+    left: 21rem;
+    bottom: 10rem;
+}
+.two_four{
+    position: absolute;
+    left: 5rem;
+    bottom: 10rem;
+}
+.noe_five{
+    position: absolute;
+    left: 7rem;
+    bottom: 24rem;
+}
+.two_five{
+    position: absolute;
+    left: 7rem;
+    bottom: 15rem;
+}
+.now_six{
+    position: absolute;
+    left: 7rem;
+    bottom: 3rem;
+}
+.one_sven{
+    position: absolute;
+    left: 5rem;
+    bottom: 14.5rem;
+}
+.two_sven{
+    position: absolute;
+    left: 20rem;
+    bottom: 14.5rem;
+}
+.one_three{
+    border: none;
+    width: 25px;
+    height: 25px;
+    background: url(../img/d.png) no-repeat center;
+    position: absolute;
+    left: 12rem;
+    bottom: 39.5rem;
+}
+.two_three{
+    border: none;
+    width: 25px;
+    height: 25px;
+    background: url(../img/d.png) no-repeat center;
+    position: absolute;
+    left: 22rem;
+    bottom: 39.5rem;
+}
+.one1_three{
+    position: absolute;
+    left: 13rem;
+    bottom: 26rem;
+}
+.tex{
+    width: 56%;
+    position: absolute;
+    left: 5rem;
+    top: 19rem;
+}
+
+.mix{
+    width: 50%;
+    position: absolute;
+    left: 8rem;
+    top: 43rem;
+}
+.klas{
+    width: 50%;
+    position: absolute;
+    left: 8rem;
+    top: 41rem;
+}
+span{
+    width: 100%;
+    position: absolute;
+    left: 6.5rem;
+    top: 57rem;
+    font-size: 1.5rem;
+    line-height: 3rem;
+    font-family: "微软雅黑";
+    color: aliceblue;
+    font-weight: bold;
+}
+#sharePage span{
+    top:54.7rem;
+}
+.klas li{
+    list-style: none;
+    font-size: 1.27rem;
+    line-height: 1.5rem;
+    font-family: "微软雅黑";
+    color: aliceblue;
+    font-weight: bold;
+}
+#preview{
+    display: block;
+    max-width: 70%;
+    max-height: 35%;
+    margin: auto;
+    height: auto;
+    width: auto;
+    position: relative;
+    top: 48.7%;
+    left: -48%;
+}
+
+
+
+
+
+
+

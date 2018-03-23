@@ -1,4 +1,4 @@
-Engine = function(){
+Engine = function () {
     var numAll = {
         numx: null,
         numy: null,
@@ -14,66 +14,66 @@ Engine = function(){
     var onPointerDownLat;
     var mouse = new THREE.Vector2(), isUserInteracting = false, phi = 0, theta = 0;
 
-    this.cssObjScale = .018;//.06
+    this.cssObjScale = .01;//.06,0.018
     this.cameraSetting = cameraSetting;
-	var scope = this;
-	this.init = function(container){
-		
-		/**容器*/
-		if(container === undefined){
-			this.container = document.createElement('div');
-			this.container.style.backgroundColor = "#FFFFFF";
-			document.body.appendChild(this.container);
-			this.containerWidth =  window.innerWidth;
-			this.containerHeight = window.innerHeight;
-		}else{
-			this.container = container;
-			this.containerWidth =  container.offsetWidth; //$(container).width();
-			this.containerHeight = container.offsetHeight; //$(container).height();
-		}
-		
-		/**渲染器*/
-		this.renderer = new THREE.WebGLRenderer({
-			antialias: true
-		});
+    var scope = this;
+    this.init = function (container) {
 
-		this.renderer.setPixelRatio( 1 );//this.containerHeight / this.containerWidth
-		this.renderer.setSize( window.innerWidth, window.innerHeight );
-		this.container.appendChild( this.renderer.domElement );
-		
-		this.scene = new THREE.Scene();
-		
-		/**CSS3D渲染器*/
+        /**容器*/
+        if (container === undefined) {
+            this.container = document.createElement('div');
+            this.container.style.backgroundColor = "#FFFFFF";
+            document.body.appendChild(this.container);
+            this.containerWidth = window.innerWidth;
+            this.containerHeight = window.innerHeight;
+        } else {
+            this.container = container;
+            this.containerWidth = container.offsetWidth; //$(container).width();
+            this.containerHeight = container.offsetHeight; //$(container).height();
+        }
+
+        /**渲染器*/
+        this.renderer = new THREE.WebGLRenderer({
+            antialias: true
+        });
+
+        this.renderer.setPixelRatio( window.devicePixelRatio );//this.containerHeight / this.containerWidth
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.container.appendChild(this.renderer.domElement);
+
+        this.scene = new THREE.Scene();
+
+        /**CSS3D渲染器*/
         this.cssrenderer = new THREE.CSS3DRenderer();
         this.cssrenderer.setSize(window.innerWidth, window.innerHeight);
         this.cssrenderer.domElement.style.position = 'absolute';
         this.cssrenderer.domElement.style.top = 0;
         this.container.appendChild(this.cssrenderer.domElement);
         this.cssscene = new THREE.Scene();
-		
-		/**透视相机*/
-		this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-		this.camera.position.z = 0.00001;
-		
-		/**全局光照*/
-		var ambient = new THREE.AmbientLight(0xFFFFFF, 1);
-		this.scene.add(ambient);
-		
-		/**控制器*/
-		//this.controls = new THREE.OrbitControls( this.camera );
-		//this.controls.enableZoom = false;
-		//this.controls.enablePan = false;
-		
-		window.addEventListener( 'resize', onWindowResize, false );
+
+        /**透视相机*/
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+        this.camera.position.z = 0.00001;
+
+        /**全局光照*/
+        var ambient = new THREE.AmbientLight(0xFFFFFF, 1);
+        this.scene.add(ambient);
+
+        /**控制器*/
+        //this.controls = new THREE.OrbitControls( this.camera );
+        //this.controls.enableZoom = false;
+        //this.controls.enablePan = false;
+
+        window.addEventListener('resize', onWindowResize, false);
         document.addEventListener('touchstart', onDocumentMouseDown, false);
         document.addEventListener('touchend', onDocumentMouseUp, false);
         document.addEventListener('touchmove', onDocumentTouchMove, false);
         initDeviceorientation();
-		animate();
-	}
+        animate();
+    }
 
     function initDeviceorientation() {
-        if ( !window.DeviceOrientationEvent) return;//!app.common.browser.isMobile ||
+        if (!window.DeviceOrientationEvent) return;//!app.common.browser.isMobile ||
 
         var cameraDatas = [];
 
@@ -89,7 +89,7 @@ Engine = function(){
 
         function deviceOrientationHandler(eventData) {
             //if (isUserInteracting) return;
-           // if (!app.isUpdate) return;
+            // if (!app.isUpdate) return;
 
             var beta = eventData.beta; // x
             var alpha = eventData.alpha; //z
@@ -155,7 +155,7 @@ Engine = function(){
     }
 
     function onDocumentMouseDown(e) {
-       // event.preventDefault();
+        // event.preventDefault();
         isUserInteracting = true;
         onPointerDownPointerX = e.touches[0].clientX;
         onPointerDownPointerY = e.touches[0].clientY;
@@ -173,7 +173,7 @@ Engine = function(){
         //if(app.currentPage !== 2){
         //    return;
         //}
-        if (e.touches.length == 1 ) {//&& clickFlag == 0
+        if (e.touches.length == 1) {//&& clickFlag == 0
 
             e.preventDefault();
 
@@ -183,36 +183,36 @@ Engine = function(){
 
     }
 
-	/**
-	 * 创建
-	 */
-	this.makeCSS3DSprite = function(ele){
-		var sprite = new THREE.CSS3DSprite(ele);
+    /**
+     * 创建
+     */
+    this.makeCSS3DSprite = function (ele) {
+        var sprite = new THREE.CSS3DSprite(ele);
         sprite.scale.x = this.cssObjScale;
         sprite.scale.y = this.cssObjScale;
-        if(ele.position != undefined)
-        	sprite.position.copy(ele.position);
-        //if(ele.rotation != undefined)
-        //	sprite.rotation.copy(ele.rotation)
+        if (ele.position != undefined)
+            sprite.position.copy(ele.position);
+        if(ele.rotation != undefined)
+        	sprite.rotation.copy(ele.rotation)
         scope.cssscene.add(sprite);
         ele.sprite = sprite;
         return sprite;
-	}
-	
-	function onWindowResize() {
-		scope.camera.aspect = scope.containerWidth / scope.containerHeight;
-		scope.camera.updateProjectionMatrix();
-		scope.renderer.setSize(scope.containerWidth, scope.containerHeight);
-	}
+    }
 
-	function animate() {
-		TWEEN.update();
-		requestAnimationFrame(animate);
-		render();
-	}
+    function onWindowResize() {
+        scope.camera.aspect = scope.containerWidth / scope.containerHeight;
+        scope.camera.updateProjectionMatrix();
+        scope.renderer.setSize(scope.containerWidth, scope.containerHeight);
+    }
 
-	function render() {
-        console.log("lon:"+(cameraSetting.lon)+"   lat:"+cameraSetting.lat);
+    function animate() {
+        TWEEN.update();
+        requestAnimationFrame(animate);
+        render();
+    }
+
+    function render() {
+        console.log("lon:" + (cameraSetting.lon) + "   lat:" + cameraSetting.lat);
         cameraSetting.lat = Math.max(-35, Math.min(35, cameraSetting.lat));
 
         phi = THREE.Math.degToRad(90 - cameraSetting.lat);
@@ -227,57 +227,57 @@ Engine = function(){
             y: numAll.numy,
             z: numAll.numz
         })
-		scope.renderer.render(scope.scene, scope.camera);
-		scope.cssrenderer.render(scope.cssscene, scope.camera);
-	}
+        scope.renderer.render(scope.scene, scope.camera);
+        scope.cssrenderer.render(scope.cssscene, scope.camera);
+    }
 };
-THREE.CSS3DObject = function ( element ) {
+THREE.CSS3DObject = function (element) {
 
-    THREE.Object3D.call( this );
+    THREE.Object3D.call(this);
 
     this.element = element;
     this.element.style.position = 'absolute';
 
-    this.addEventListener( 'removed', function ( event ) {
+    this.addEventListener('removed', function (event) {
 
-        if ( this.element.parentNode !== null ) {
+        if (this.element.parentNode !== null) {
 
-            this.element.parentNode.removeChild( this.element );
+            this.element.parentNode.removeChild(this.element);
 
-            for ( var i = 0, l = this.children.length; i < l; i ++ ) {
+            for (var i = 0, l = this.children.length; i < l; i++) {
 
-                this.children[ i ].dispatchEvent( event );
+                this.children[i].dispatchEvent(event);
 
             }
 
         }
 
-    } );
+    });
 
 };
 
-THREE.CSS3DObject.prototype = Object.create( THREE.Object3D.prototype );
+THREE.CSS3DObject.prototype = Object.create(THREE.Object3D.prototype);
 
-THREE.CSS3DSprite = function ( element ) {
+THREE.CSS3DSprite = function (element) {
 
-    THREE.CSS3DObject.call( this, element );
+    THREE.CSS3DObject.call(this, element);
 
 };
 
-THREE.CSS3DSprite.prototype = Object.create( THREE.CSS3DObject.prototype );
+THREE.CSS3DSprite.prototype = Object.create(THREE.CSS3DObject.prototype);
 
 //
 
 THREE.CSS3DRenderer = function () {
 
-    console.log( 'THREE.CSS3DRenderer', THREE.REVISION );
+    console.log('THREE.CSS3DRenderer', THREE.REVISION);
 
     var _width, _height;
     var _widthHalf, _heightHalf;
 
     var matrix = new THREE.Matrix4();
 
-    var domElement = document.createElement( 'div' );
+    var domElement = document.createElement('div');
     domElement.style.overflow = 'hidden';
 
     domElement.style.WebkitTransformStyle = 'preserve-3d';
@@ -287,20 +287,20 @@ THREE.CSS3DRenderer = function () {
 
     this.domElement = domElement;
 
-    var cameraElement = document.createElement( 'div' );
+    var cameraElement = document.createElement('div');
 
     cameraElement.style.WebkitTransformStyle = 'preserve-3d';
     cameraElement.style.MozTransformStyle = 'preserve-3d';
     cameraElement.style.oTransformStyle = 'preserve-3d';
     cameraElement.style.transformStyle = 'preserve-3d';
 
-    domElement.appendChild( cameraElement );
+    domElement.appendChild(cameraElement);
 
     this.setClearColor = function () {
 
     };
 
-    this.setSize = function ( width, height ) {
+    this.setSize = function (width, height) {
 
         _width = width;
         _height = height;
@@ -316,87 +316,87 @@ THREE.CSS3DRenderer = function () {
 
     };
 
-    var epsilon = function ( value ) {
+    var epsilon = function (value) {
 
-        return Math.abs( value ) < 0.000001 ? 0 : value;
+        return Math.abs(value) < 0.000001 ? 0 : value;
 
     };
 
-    var getCameraCSSMatrix = function ( matrix ) {
+    var getCameraCSSMatrix = function (matrix) {
 
         var elements = matrix.elements;
 
         return 'matrix3d(' +
-            epsilon( elements[ 0 ] ) + ',' +
-            epsilon( - elements[ 1 ] ) + ',' +
-            epsilon( elements[ 2 ] ) + ',' +
-            epsilon( elements[ 3 ] ) + ',' +
-            epsilon( elements[ 4 ] ) + ',' +
-            epsilon( - elements[ 5 ] ) + ',' +
-            epsilon( elements[ 6 ] ) + ',' +
-            epsilon( elements[ 7 ] ) + ',' +
-            epsilon( elements[ 8 ] ) + ',' +
-            epsilon( - elements[ 9 ] ) + ',' +
-            epsilon( elements[ 10 ] ) + ',' +
-            epsilon( elements[ 11 ] ) + ',' +
-            epsilon( elements[ 12 ] ) + ',' +
-            epsilon( - elements[ 13 ] ) + ',' +
-            epsilon( elements[ 14 ] ) + ',' +
-            epsilon( elements[ 15 ] ) +
+            epsilon(elements[0]) + ',' +
+            epsilon(-elements[1]) + ',' +
+            epsilon(elements[2]) + ',' +
+            epsilon(elements[3]) + ',' +
+            epsilon(elements[4]) + ',' +
+            epsilon(-elements[5]) + ',' +
+            epsilon(elements[6]) + ',' +
+            epsilon(elements[7]) + ',' +
+            epsilon(elements[8]) + ',' +
+            epsilon(-elements[9]) + ',' +
+            epsilon(elements[10]) + ',' +
+            epsilon(elements[11]) + ',' +
+            epsilon(elements[12]) + ',' +
+            epsilon(-elements[13]) + ',' +
+            epsilon(elements[14]) + ',' +
+            epsilon(elements[15]) +
             ')';
 
     };
 
-    var getObjectCSSMatrix = function ( matrix ) {
+    var getObjectCSSMatrix = function (matrix) {
 
         var elements = matrix.elements;
 
         return 'translate3d(-50%,-50%,0) matrix3d(' +
-            epsilon( elements[ 0 ] ) + ',' +
-            epsilon( elements[ 1 ] ) + ',' +
-            epsilon( elements[ 2 ] ) + ',' +
-            epsilon( elements[ 3 ] ) + ',' +
-            epsilon( - elements[ 4 ] ) + ',' +
-            epsilon( - elements[ 5 ] ) + ',' +
-            epsilon( - elements[ 6 ] ) + ',' +
-            epsilon( - elements[ 7 ] ) + ',' +
-            epsilon( elements[ 8 ] ) + ',' +
-            epsilon( elements[ 9 ] ) + ',' +
-            epsilon( elements[ 10 ] ) + ',' +
-            epsilon( elements[ 11 ] ) + ',' +
-            epsilon( elements[ 12 ] ) + ',' +
-            epsilon( elements[ 13 ] ) + ',' +
-            epsilon( elements[ 14 ] ) + ',' +
-            epsilon( elements[ 15 ] ) +
+            epsilon(elements[0]) + ',' +
+            epsilon(elements[1]) + ',' +
+            epsilon(elements[2]) + ',' +
+            epsilon(elements[3]) + ',' +
+            epsilon(-elements[4]) + ',' +
+            epsilon(-elements[5]) + ',' +
+            epsilon(-elements[6]) + ',' +
+            epsilon(-elements[7]) + ',' +
+            epsilon(elements[8]) + ',' +
+            epsilon(elements[9]) + ',' +
+            epsilon(elements[10]) + ',' +
+            epsilon(elements[11]) + ',' +
+            epsilon(elements[12]) + ',' +
+            epsilon(elements[13]) + ',' +
+            epsilon(elements[14]) + ',' +
+            epsilon(elements[15]) +
             ')';
 
     };
 
-    var renderObject = function ( object, camera ) {
+    var renderObject = function (object, camera) {
 
-        if ( object instanceof THREE.CSS3DObject ) {
+        if (object instanceof THREE.CSS3DObject) {
 
             var style;
 
-            if ( object instanceof THREE.CSS3DSprite ) {
+            if (object instanceof THREE.CSS3DSprite) {
 
                 // http://swiftcoder.wordpress.com/2008/11/25/constructing-a-billboard-matrix/
 
-                matrix.copy( camera.matrixWorldInverse );
+                matrix.copy(camera.matrixWorldInverse);
                 matrix.transpose();
-                matrix.copyPosition( object.matrixWorld );
-                matrix.scale( object.scale );
+                matrix.copyPosition(object.matrixWorld);
+                matrix.scale(object.scale);
 
-                matrix.elements[ 3 ] = 0;
-                matrix.elements[ 7 ] = 0;
-                matrix.elements[ 11 ] = 0;
-                matrix.elements[ 15 ] = 1;
+                matrix.elements[3] = 0;
+                matrix.elements[7] = 0;
+                matrix.elements[11] = 0;
+                matrix.elements[15] = 1;
 
-                style = getObjectCSSMatrix( matrix );
+                style = getObjectCSSMatrix(matrix);
 
             } else {
 
-                style = getObjectCSSMatrix( object.matrixWorld );
+                style = getObjectCSSMatrix(object.matrixWorld);
 
             }
 
@@ -407,25 +407,25 @@ THREE.CSS3DRenderer = function () {
             element.style.oTransform = style;
             element.style.transform = style;
 
-            if ( element.parentNode !== cameraElement ) {
+            if (element.parentNode !== cameraElement) {
 
-                cameraElement.appendChild( element );
+                cameraElement.appendChild(element);
 
             }
 
         }
 
-        for ( var i = 0, l = object.children.length; i < l; i ++ ) {
+        for (var i = 0, l = object.children.length; i < l; i++) {
 
-            renderObject( object.children[ i ], camera );
+            renderObject(object.children[i], camera);
 
         }
 
     };
 
-    this.render = function ( scene, camera ) {
+    this.render = function (scene, camera) {
 
-        var fov = 0.5 / Math.tan( THREE.Math.degToRad( camera.fov * 0.5 ) ) * _height;
+        var fov = 0.5 / Math.tan(THREE.Math.degToRad(camera.fov * 0.5)) * _height;
 
         domElement.style.WebkitPerspective = fov + "px";
         domElement.style.MozPerspective = fov + "px";
@@ -434,11 +434,11 @@ THREE.CSS3DRenderer = function () {
 
         scene.updateMatrixWorld();
 
-        if ( camera.parent === undefined ) camera.updateMatrixWorld();
+        if (camera.parent === undefined) camera.updateMatrixWorld();
 
-        camera.matrixWorldInverse.getInverse( camera.matrixWorld );
+        camera.matrixWorldInverse.getInverse(camera.matrixWorld);
 
-        var style = "translate3d(0,0," + fov + "px)" + getCameraCSSMatrix( camera.matrixWorldInverse ) +
+        var style = "translate3d(0,0," + fov + "px)" + getCameraCSSMatrix(camera.matrixWorldInverse) +
             " translate3d(" + _widthHalf + "px," + _heightHalf + "px, 0)";
 
         cameraElement.style.WebkitTransform = style;
@@ -446,8 +446,37 @@ THREE.CSS3DRenderer = function () {
         cameraElement.style.oTransform = style;
         cameraElement.style.transform = style;
 
-        renderObject( scene, camera );
+        renderObject(scene, camera);
 
     };
 
 };
+/**
+ * 从当前数组内随机获取指定个数的不重复的元素
+ * @param length 元素的个数
+ * @returns {any[]} 新数组
+ */
+var getRandomItems = function  (array,length) {
+    //新建一个数组,将传入的数组复制过来,用于运算,而不要直接操作传入的数组;
+    var temp_array = new Array();
+    for (var index in array) {
+        temp_array.push(array[index]);
+    }
+    //取出的数值项,保存在此数组
+    var return_array = new Array();
+    for (var i = 0; i < length; i++) {
+        //判断如果数组还有可以取出的元素,以防下标越界
+        if (temp_array.length > 0) {
+            //在数组中产生一个随机索引
+            var arrIndex = Math.floor(Math.random() * temp_array.length);
+            //将此随机索引的对应的数组元素值复制出来
+            return_array[i] = temp_array[arrIndex];
+            //然后删掉此索引的数组元素,这时候temp_array变为新的数组
+            temp_array.splice(arrIndex, 1);
+        } else {
+            //数组中数据项取完后,退出循环,比如数组本来只有10项,但要求取出20项.
+            break;
+        }
+    }
+    return return_array;
+}
