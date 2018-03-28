@@ -8,15 +8,16 @@ app.show3DPage = function (texture) {
     var quesDeg = [[-254, -35], [-222, 29], [-179, -23], [-151, 30], [-113, -35], [-80, 5.4], [-33, -11], [-9, 35], [25, 0.5], [66, -35]];
     var position = [[-1, -6, 10], [-5.8, 6, 8.14], [-9.45, -2, 3.25], [-9.58, 6, -2.84], [-6.15, -8, -7.88], [-0.436, 2, -9.99], [5.44, 0, -6.38], [9.30, 8, -3.66], [9.70, 0, 2.41], [6.49, -8, 7.6]];
 
+    this.engine.init(document.getElementById("3dPage"));
     //初始化场景
-/*    var geometry = new THREE.SphereGeometry(400, 240, 80);
+    var geometry = new THREE.SphereGeometry(400, 240, 80);
     geometry.scale(-1.3, 1, 1);
 
     var material = new THREE.MeshBasicMaterial({
-        map: texture
+        map: app.texture
     });
     var mesh = new THREE.Mesh(geometry, material);
-    this.engine.scene.add(mesh);*/
+    this.engine.scene.add(mesh);
 
     var questions = Utils.getArrayItems(QSData.questions, cardCount);
     //生成答题卡
@@ -24,13 +25,13 @@ app.show3DPage = function (texture) {
         var data = questions[j];
         var resLi = "";
         for (var k = 0; k < data.answer.length; k++) {
-            resLi += '<li><label><input type="radio" name="res'+j+'" value="' + (k + 1) + '">' + data.answer[k] + '</label></li>';
+            resLi += '<li><label><input type="radio" name="res' + j + '" value="' + (k + 1) + '">' + data.answer[k] + '</label></li>';
         }
 
         var ele = $('<div class="card">' +
             '<img src="img/card/' + cards[j] + '.png" style="position: absolute">' +
             '<div >' +
-            '<spa>' + (j + 1) + '.' + data.question + '</spa>' +
+            '<span>' + (j + 1) + '.' + data.question + '</span>' +
             '<ul >' + resLi + '</ul>' +
             '<img  src="img/ok.png" ></div>' +
             '</div>')[0];
@@ -52,13 +53,13 @@ app.show3DPage = function (texture) {
 
 
     function commitResult(e) {
-        app.result = computeResult();
+/*        app.result = computeResult();
         app.showResultPage();
-        return;
+        return;*/
         var num = e.currentTarget.num;
-        var index = num-1;
+        var index = num - 1;
 
-        var result = $(e.currentTarget).parent().find('input[name="res'+index+'"]:checked').val();
+        var result = $(e.currentTarget).parent().find('input[name="res' + index + '"]:checked').val();
         if (result == undefined) {
             alert("请选择答案");
             return;
@@ -91,8 +92,8 @@ app.show3DPage = function (texture) {
                         lon: 16000,
                     }, 4000)
                         .easing(TWEEN.Easing.Cubic.In).onComplete(function () {
-                            app.result = computeResult();
-                            app.showResultPage();
+                        app.result = computeResult();
+                        app.showResultPage();
                     }).start();
                 }
             }
@@ -104,7 +105,7 @@ app.show3DPage = function (texture) {
 
     /**计算成绩*/
     function computeResult() {
-        return QSData.result[2];
+        return QSData.result[1];
         var count = 0, i;
         for (i = 0; i < questions.length; i++) {
             if (questions[i].rightIdx == questions[i].result)
@@ -125,133 +126,223 @@ app.show3DPage = function (texture) {
 
 app.loader = function () {
 
-    this.engine.init(document.getElementById("3dPage"));
+
     var imageObj = new Image();
 
     imageObj.onload = function () {
-        var texture = new THREE.Texture();
-        texture.image = this;
-        texture.needsUpdate = true;
-        app.show3DPage(texture);
+        app.texture = new THREE.Texture();
+        app.texture.image = this;
+        app.texture.needsUpdate = true;
+        //app.show3DPage();
     };
 
     imageObj.src = app.texturePath;
 };
 
 /**显示测试结果页*/
-app.showResultPage = function (noUpdate) {
+app.showResultPage = function () {
+    app.engine.dispose();
     $("#3dPage").hide();
     $("#resultPage").show();
-    if(app.result.title != "")
-        $("#resTitle").text('你拥有的是"'+app.result.title+'#科学商#"');
+    if (app.result.title != "")
+        $("#resTitle").text('你拥有的是"' + app.result.title + '#科学商#"');
     $("#resText").text(app.result.text);
-    $(".two").click(function(){
+    $(".two").click(function () {
         $("#resultPage").hide();
         app.showSexPage();
+    });
+    $(".two2").click(function () {
+        window.location.reload();
     });
 }
 
 
 /**显示性别选择页*/
-app.showSexPage = function(){
+app.showSexPage = function () {
     $("#sexPage").show();
     //确认
-    $(".one1_three").click(function(){
+    $(".one1_three").click(function () {
         $("#sexPage").hide();
-        app.showPSPage(1);
+        app.showPSPage($('#sexPage input[name="sex"]:checked').val());
     });
 }
 
-/**显示合照页*/
-app.showPSPage = function(sex){
+/**
+ * 显示合照页
+ * @param sex 性别
+ * @param photo 上传的相片
+ */
+app.showPSPage = function (sex, photo) {
     $("#psPage").show();
-    var num = Utils.getRandomNum(2,1);
-    var type = sex == 0 ? "men" : "women";
+    if (sex != undefined) {
 
-    $("#ps-bg").attr("src","img/share-bg-"+type+num+".png");
-    var text = app.result.text;
-    if(app.result.title != "")
-        text = '你拥有的是"'+app.result.title+'#科学商#"'+ text;
-    $(".mix li").text(text);
-    var title = "幸运的你与"+app.result.name+"是一个类型的#科学商# "
-    $("#psPage span").text(title);
+        var num = Utils.getRandomNum(2, 1);
+        app.result.sex = sex;
+        $("#ps-bg").attr("src", "img/ps-bg-" + sex + ".png");
+        $("#face").attr("src", "img/ps-face-" + sex + ".png");
+        $("#avatar-ps").attr("class", "face-" + sex + " face");
 
-    //设置合照的明星相片
-    $("").attr("src",app.result.photo);
+        var text = app.result.text;
+        if (app.result.title != "")
+            text = '你拥有的是"' + app.result.title + '#科学商#\n"' + text;
+        $(".mix li").text(text);
+        var title = "幸运的你与" + app.result.name + "是一个类型的#科学商# "
+        $("#psPage span").text(title);
 
-    //上传，跳至上传图片页
-    $(".two_four").click(function(){
-        $("#psPage").hide();
-        app.showUpPhotoPage();
-    });
+        //设置合照的明星相片
+        $(".star img").attr("src", "img/photo/" + app.result.photo);
 
-    //生成合照，跳转至分享页
-    $(".one_four").click(function(){
-        $("#psPage").hide();
-        app.showSharePage(text,title);
-    });
+        //上传，跳至上传图片页
+        $(".two_four").click(function () {
+            $("#psPage").hide();
+            app.showUpPhotoPage();
+        });
+
+        //生成合照，跳转至分享页
+        $(".one_four").click(goToShare);
+
+        function goToShare() {
+            if ($("#avatar-ps").attr("src") == "") {
+                alert("请先上传相片");
+                return;
+            }
+            $("#psPage").hide();
+            app.showSharePage(text, title, $("#avatar-ps").attr("src"));
+        }
+    } else if (photo != undefined) {
+        $("#face").hide();
+        $("#avatar-ps").attr("src", photo);
+    }
+
 
 }
 
 /**显示相片上传页*/
-app.showUpPhotoPage = function(){
+app.showUpPhotoPage = function () {
     $("#uploadPage").show();
+    if (!app.upLoaded) {
 
-    //选择相片
-    $(".noe_five").click(function(){
-        $("#uploadFile").trigger("click");
-    });
-    var file;
-    $("#uploadFile").change(function(e){
-        var element = e.target;
-        if (!element.files[0]) {
-            return;
-        }
-        file = element.files[0];
-        var reader = new FileReader();
-        reader.onload = function (theFile) {
-            $("#preview").attr("src",theFile.target.result);
-        };
-        reader.readAsDataURL(file);
+        //选择相片
+        $(".noe_five").click(function () {
+            $("#uploadFile").trigger("click");
+        });
 
-    });
-
-    //确定上传，跳转至合照页
-    $(".two_five").click(function(){
-        if(file == undefined){
-            alert("请先上传照片");
-            return;
-        }
-        $("#psPage").hide();
-        app.showPSPage();
-    });
+        var clipArea = new bjj.PhotoClip("#clipArea", {
+            size: [260, 260],
+            outputSize: [640, 640],
+            file: "#uploadFile",
+            ok: ".two_five",
+            loadStart: function () {
+                console.log("照片读取中");
+            },
+            loadComplete: function () {
+                console.log("照片读取完成");
+            },
+            clipFinish: function (dataURL) {
+                app.upLoaded = true;
+                $("#uploadPage").hide();
+                app.showPSPage(undefined, dataURL);
+            }
+        });
+    }
 }
 
-/**显示分享页*/
-app.showSharePage = function(text,title){
+/**
+ * 显示分享页
+ * @param text 结果总结
+ * @param title 标题
+ */
+app.showSharePage = function (text, title, photo) {
     $("#sharePage").show();
 
+    $("#sharePage .bg").attr("src", "img/share-bg-" + app.result.sex + ".png");
+    $(".star2 img").attr("src", "img/photo/" + app.result.photo);
+    $("#share-face").attr("src", photo);
+    $("#share-face").attr("class", (app.result.sex == "men" ? "face-men" : "share-face-women") + " face");
     $(".klas li").text(text);
     $("#sharePage span").text(title);
 
     //查看成绩
-    $(".one_sven").click(function(){
-        $("#sharePage").hide();
-        $("#resultPage").show();
+    $(".one_sven").click(function () {
+        window.location.reload();
     });
 
     //分享给他人
-    $(".two_sven").click(function(){
+    $(".two_sven").click(function () {
+        $("#share-mask").show();
+    });
+    //点击隐藏
+    $("#share-mask").click(function () {
+        $("#share-mask").hide();
+    });
 
+    setTimeout(function () {
+        $("#music").hide();
+        $("#sharePage input").hide();
+        html2canvas($("#sharePage")[0], {
+            width: $("#sharePage .bg").width(),
+            height: $("#sharePage .bg").height(),
+            scale: 1.5
+        }).then(function (canvas) {
+            $(".star2 img").hide();
+            $(".klas li").hide();
+            $("#sharePage span").hide();
+            $("#sharePage .bg").attr("src", canvas.toDataURL());
+            $("#sharePage input").show();
+            $("#music").show();
+        });
+    }, 300);
+
+}
+
+/**初始化背景音乐*/
+app.initAudio = function () {
+    var play = $("#music-play")[0];
+    $("#music").click(function () {
+        if (play.paused) {
+            play.play();
+            this.setAttribute("class", "on");
+        } else {
+            play.pause();
+            this.setAttribute("class", "off");
+        }
     });
 }
 
+app.drawResult = function () {
+    var canvas = document.createElement("canvas");
+    canvas.width = $("#sharePage .bg").width();
+    canvas.height = $("#sharePage .bg").height();
+    var ctx = canvas.getContext("2d");
+    //头像
+    ctx.drawImage($("#share-face")[0], 0, 0, canvas.width, canvas.height);
+    //背景
+    ctx.drawImage($("#sharePage .bg")[0], 0, 0, canvas.width, canvas.height);
+    var starPhoto = $("star2 img");
+    //明星头像
+    ctx.drawImage(starPhoto[0], starPhoto.offset().left, starPhoto.offset().top, starPhoto.width(), starPhoto.height());
+}
+
+
 $(function () {
-    $(".one").click(function(){
+    app.initAudio();
+    app.loader();
+    //点击开始
+    $(".one").click(function () {
         $("#homePage").hide();
-        app.loader();
-    })
-    // app.loader();
+        app.show3DPage();
+    });
+
+    var href = window.location.href;//"http://www.runoob.com"
+    new QRCode($(".result-rect")[0], {
+        width : 110,
+        height : 110
+    }).makeCode(href);
+    new QRCode($(".share-rect")[0], {
+        width : 95,
+        height : 95
+    }).makeCode(href);
+
 });
 
 

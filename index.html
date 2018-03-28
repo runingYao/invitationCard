@@ -11,26 +11,32 @@
 </head>
 
 <body>
+<audio id="music-play" src="audio/music.mp3" preload="auto" loop="loop" autoplay style="visibility:hidden"></audio>
+<div id="music" class="on"></div>
+
 <div id="homePage" class="page" style="display: block">
-    <img src="img/homebg.jpg" width="100%"/>
+    <img src="img/homebg.jpg" class="bg"/>
     <input class="one" type="image" src="img/start.png" name="go" value="点击开始"/>
 </div>
 <div id="3dPage"></div>
+
 <div id="resultPage" class="page">
     <ul class="tex">
         <li id="resTitle">你拥有的是“经验主义型科学商”</li>
-        <li id="resText">是反应灵敏和自发主动的一种人，喜欢凭感觉做事，缺乏一定的科学理论知识，往往猜中了开头，猜不中结果。不过别灰心，通过后天的努力可以提高自己的“科学商”幸运的是你和高晓攀是一个类型的#科学商#。</li>
+        <li id="resText">
+            是反应灵敏和自发主动的一种人，喜欢凭感觉做事，缺乏一定的科学理论知识，往往猜中了开头，猜不中结果。不过别灰心，通过后天的努力可以提高自己的“科学商”幸运的是你和高晓攀是一个类型的#科学商#。
+        </li>
     </ul>
-    <img src="img/resultbg.jpg" width="100%" height="100%"/>
-    <p class="wise"><img src="img/xiaolon.png" width="100%" height="100%"/>
-    <p></p>
-    <input class="two" type="image" src="img/sharebtn.png" value="测试结果页"/>
+    <img src="img/resultbg.jpg" class="bg"/>
+    <div class="result-rect"></div>
+    <input class="two" type="image" src="img/sharebtn.png"/>
+    <input class="two2" type="image" src="img/play-again.png"/>
 </div>
 
-<div id="sexPage"  class="page">
-    <img src="img/sexbg.jpg" width="100%" height="100%"/>
-    <input class="one_three" type="radio" value="0" checked="checked" name="sex" />
-    <input class="two_three" type="radio"  checked="checked" value="1" name="sex"/>
+<div id="sexPage" class="page">
+    <img src="img/sex-bg.png" class="bg"/>
+    <input class="one_three" type="radio" value="men" checked="checked" name="sex"/>
+    <input class="two_three" type="radio" checked="checked" value="women" name="sex"/>
     <input class="one1_three" type="image" src="img/confirm.png" value="确认"/>
 </div>
 
@@ -38,19 +44,23 @@
     <ul class="mix">
         <li>撒娇客户端看撒谎的空间萨的健康 撒和的空间和萨快结婚调查萨克计划大口径健康撒 看到仓库萨斯的表空间撒</li>
     </ul>
-    <img id="ps-bg" src="img/psbg.jpg" width="100%" height="100%"/>
-    <a class="wuns"><img src="img/photo/gxp.png" width="100%" height="100%" /></a>
+    <img id="face" class="bg face"/>
+    <img id="ps-bg" class="bg"/>
+    <img id="avatar-ps"/>
+    <div class="star">
+        <img src="img/photo/gxp.png"/>
+    </div>
     <span>啊死就卡的很看撒谎打开和撒旦</span>
     <input class="one_four" type="image" src="img/crate.png" value="生成"/>
     <input class="two_four" type="image" src="img/upload.png" value="上传"/>
 </div>
 
 <div id="uploadPage" class="page">
-    <img src="img/uploadbg.jpg" width="100%" height="100%"/>
-    <a class="beib"><img id="preview" src="" width="256" height="261" /></a>
+    <img src="img/uploadbg.jpg" class="bg"/>
+    <div id="clipArea"></div>
     <input id="uploadFile" type="file" name="image" accept="image/*" style="display: none">
-    <input class="noe_five" type="image" src="img/selectphoto.png" value="选择照片"/>
-    <input class="two_five" type="image" src="img/confirmup.png" value="确定上传"/>
+    <input class="noe_five hide" type="image" src="img/selectphoto.png" value="选择照片"/>
+    <input class="two_five hide" type="image" src="img/confirmup.png" value="确定上传"/>
 </div>
 
 <div id="sharePage" class="page">
@@ -58,19 +68,27 @@
         <li>节啊看撒谎的空间撒可敬的撒娇健康萨博的空间撒好萨的境况的空间大撒即可很淡定空间撒黑客基地萨克</li>
     </ul>
     <span>啊死就卡的很看撒谎打开和撒旦</span>
-    <img src="img/sharebg.png" width="100%" height="100%"/>
-    <a class="wuns"><img src="img/photo/gxp.png" width="100%" height="100%" /></a>
-    <input class="one_sven" type="image" src="img/button2  4.png" value="科学指南"/>
-    <input class="two_sven" type="image" src="img/button2  5.png" value="科学商"/>
+    <img class="bg"/>
+    <img id="share-face"/>
+    <div class="star2">
+        <img src="img/photo/gxp.png"/>
+    </div>
+    <div class="share-rect"></div>
+    <input class="one_sven hide" type="image" src="img/button2  4.png"/>
+    <input class="two_sven hide" type="image" src="img/button2  5.png"/>
+    <img id="share-mask" src="img/share-wx.png" class="mask"/>
 </div>
 
-<div id="sharePage2" class="page">
-    <img src="img/sharebg2.jpg" width="100%" height="100%"/>
-</div>
 <script type="text/javascript" src="js/data.js"></script>
 <script type="text/javascript" src="js/plugin/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="js/plugin/tween.js"></script>
 <script type="text/javascript" src="js/plugin/three.min.js"></script>
+<script type="text/javascript" src="js/plugin/iscroll-zoom.js"></script>
+<script type="text/javascript" src="js/plugin/hammer.js"></script>
+<script type="text/javascript" src="js/plugin/lrz.all.bundle.js"></script>
+<script type="text/javascript" src="js/plugin/jquery.photoClip.min.js"></script>
+<script type="text/javascript" src="js/plugin/html2canvas.min.js"></script>
+<script type="text/javascript" src="js/plugin/qrcode.min.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript" src="js/ylz_engine.js"></script>
 <script type="text/javascript" src="js/main.js"></script>

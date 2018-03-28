@@ -16,6 +16,7 @@ Engine = function () {
 
     this.cssObjScale = .01;//.06,0.018
     this.cameraSetting = cameraSetting;
+    this.objects = [];
     var scope = this;
     this.init = function (container) {
 
@@ -194,9 +195,28 @@ Engine = function () {
             sprite.position.copy(ele.position);
         if(ele.rotation != undefined)
         	sprite.rotation.copy(ele.rotation)
-        scope.cssscene.add(sprite);
+        this.cssscene.add(sprite);
+        this.objects.push(sprite);
         ele.sprite = sprite;
         return sprite;
+    }
+
+    this.addMesh = function(mesh){
+        this.scene.add(mesh);
+        this.objects.push(mesh);
+    }
+
+    this.dispose = function(){
+        for (var i = 0; i < this.objects.length; i++) {
+            var obj = this.objects[i];
+            obj.parent.remove(obj);
+            if(obj.geometry !== undefined)
+                obj.geometry.dispose();
+            if(obj.material !== undefined)
+                obj.material.dispose();
+            obj = null;
+        }
+        this.objects = [];
     }
 
     function onWindowResize() {
@@ -212,7 +232,7 @@ Engine = function () {
     }
 
     function render() {
-        console.log("lon:" + (cameraSetting.lon) + "   lat:" + cameraSetting.lat);
+        //console.log("lon:" + (cameraSetting.lon) + "   lat:" + cameraSetting.lat);
         cameraSetting.lat = Math.max(-35, Math.min(35, cameraSetting.lat));
 
         phi = THREE.Math.degToRad(90 - cameraSetting.lat);

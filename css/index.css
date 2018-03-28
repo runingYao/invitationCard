@@ -14,8 +14,9 @@ html, body {
     position: absolute;
     left: 80px;
     top: 80px;
-    font-size: 28px;
-    color: #FFF;
+    font-size: 30px;
+    color: #00ffff;
+    font-weight: bold;
 }
 .card div img{
     left: 30px;
@@ -60,14 +61,14 @@ li{
 .mix li{
     list-style: none;
     font-size: 1.3rem;
-    line-height: 2rem;
+    line-height: 2.3rem;
     font-family: "微软雅黑";
     color: aliceblue;
     font-weight: bold;
 }
 p{
     position: absolute;
-    left: 27rem;
+    left: 22rem;
     bottom: 12rem;
 }
 a{
@@ -88,39 +89,44 @@ a{
     left: 19rem;
     bottom: 47rem;
 }
-.page img {
+.bg{
     width: 100%;
     height: 100%;
 }
 .one{
     position: absolute;
-    left: 7rem;
-    bottom: 25rem;
+    left: 6rem;
+    bottom: 11.5rem;
 }
 .two{
     position: absolute;
-    left: 10rem;
-    bottom: 11rem;
+    left: 2rem;
+    bottom: 12rem;
+}
+.two2{
+    position: absolute;
+    left: 2rem;
+    bottom: 6rem;
 }
 .one_four{
     position: absolute;
     left: 21rem;
-    bottom: 10rem;
+    bottom: 4rem;
 }
 .two_four{
     position: absolute;
     left: 5rem;
-    bottom: 10rem;
+    bottom: 4rem;
 }
 .noe_five{
     position: absolute;
     left: 7rem;
-    bottom: 24rem;
+    bottom: 18rem;
 }
 .two_five{
     position: absolute;
     left: 7rem;
-    bottom: 15rem;
+    bottom: 9rem;
 }
 .now_six{
     position: absolute;
@@ -130,12 +136,12 @@ a{
 .one_sven{
     position: absolute;
     left: 5rem;
-    bottom: 14.5rem;
+    bottom: 8.5rem;
 }
 .two_sven{
     position: absolute;
     left: 20rem;
-    bottom: 14.5rem;
+    bottom: 8.5rem;
 }
 .one_three{
     border: none;
@@ -144,7 +150,7 @@ a{
     background: url(../img/d.png) no-repeat center;
     position: absolute;
     left: 12rem;
-    bottom: 39.5rem;
+    bottom: 33.5rem;
 }
 .two_three{
     border: none;
@@ -153,37 +159,37 @@ a{
     background: url(../img/d.png) no-repeat center;
     position: absolute;
     left: 22rem;
-    bottom: 39.5rem;
+    bottom: 33.5rem;
 }
 .one1_three{
     position: absolute;
     left: 13rem;
-    bottom: 26rem;
+    bottom: 19rem;
 }
 .tex{
-    width: 56%;
+    width: 52%;
     position: absolute;
     left: 5rem;
-    top: 19rem;
+    top: 12rem;
 }
 
 .mix{
-    width: 50%;
+    width: 61%;
     position: absolute;
     left: 8rem;
-    top: 43rem;
+    top: 38rem;
 }
 .klas{
-    width: 50%;
+    width: 61%;
     position: absolute;
     left: 8rem;
-    top: 41rem;
+    top: 34.5rem;
 }
-span{
+.page span{
     width: 100%;
     position: absolute;
     left: 6.5rem;
-    top: 57rem;
+    top: 51.2rem;
     font-size: 1.5rem;
     line-height: 3rem;
     font-family: "微软雅黑";
@@ -191,12 +197,12 @@ span{
     font-weight: bold;
 }
 #sharePage span{
-    top:54.7rem;
+    top:48.7rem;
 }
 .klas li{
     list-style: none;
-    font-size: 1.27rem;
-    line-height: 1.5rem;
+    font-size: 1.3rem;
+    line-height: 2.3rem;
     font-family: "微软雅黑";
     color: aliceblue;
     font-weight: bold;
@@ -212,10 +218,141 @@ span{
     top: 48.7%;
     left: -48%;
 }
+#music.on {
+    background-image: url(../img/music_on.png);
+    animation: 4s rotate infinite linear;
+    -webkit-animation: 4s -webkit-rotate infinite linear;
+}
+#music.off {
+    background-image: url(../img/music_off.png);
+}
+#music {
+    width: 5rem;
+    height: 5rem;
+    position: absolute;
+    right: 4%;
+    top: 4%;
+    z-index: 1;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+@keyframes -webkit-rotate {
+    0%{
+        -webkit-transform: rotate(0);
+    }
+    100%{
+        -webkit-transform: rotate(360deg);
+    }
+}
 
+#clipArea{
+/*    background-color: aliceblue;
+    opacity: 0.5;*/
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 28rem;
+    height: 27rem;
+    margin-left: -225px;
+    margin-top: -363px;
+}
 
+/*#avatar-ps{
+    position: absolute;
+    left: 22%;
+    top: 27%;
+    width: 9rem;
+    opacity: 0.5;
+}*/
 
+.face{
+    position: absolute;
+    z-index: -1;
+}
+.face-men{
+    left: 19.5%;
+    top: 19%;
+    width: 10.3rem;
+}
+.face-women{
+    left: 21.5%;
+    top: 21.5%;
+    width: 10rem;
+}
 
+.share-face-women{
+    left: 21.5%;
+    top: 18.5%;
+    width: 10rem;
+}
 
+.star{
+    position: absolute;
+    left: 19rem;
+    bottom: 27rem;
+}
+.star img{
+    max-height: 29rem;
+}
+
+.star2{
+    position: absolute;
+    left: 19rem;
+    bottom: 30rem;
+}
+.star2 img{
+    max-height: 27rem;
+}
+.mask{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    opacity: 0.9;
+    z-index: 2;
+    display: none;
+}
+.result-rect{
+    width: 110px;
+    height: auto;
+    position: absolute;
+    right: 2rem;
+    top: 56.2rem;
+}
+.share-rect{
+    width: 95px;
+    height: auto;
+    position: absolute;
+    right: 2rem;
+    top: 57rem;
+}
+/*.demo--radio {
+    display: none
+}
+
+.demo--radioInput {
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 100%;
+    display: inline-block;
+    height: 16px;
+    margin-right: 10px;
+    margin-top: -1px;
+    vertical-align: middle;
+    width: 16px;
+    line-height: 1
+}
+
+.demo--radio:checked+.demo--radioInput:after {
+    background-color: #00ffff;
+    border-radius: 100%;
+    content: "";
+    display: inline-block;
+    height: 12px;
+    margin: 2px;
+    width: 12px
+}*/
 
 
