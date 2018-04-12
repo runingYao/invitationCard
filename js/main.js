@@ -1,12 +1,12 @@
-var app = {engine: new Engine(), elements: [], texturePath: "img/bg.jpg", tilesNum: 6};
+var app = {engine: new Engine(), elements: [], texturePath: "img/bg.webp", tilesNum: 6};
 app.show3DPage = function (texture) {
     var cardCount = 10;
     var choosenSure = Array(cardCount).fill(0);
     var choosen = Array(cardCount).fill(0);
     var INTERSECTED;
     var cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    var quesDeg = [[-254, -35], [-222, 29], [-179, -23], [-151, 30], [-113, -35], [-80, 5.4], [-33, -11], [-9, 35], [25, 0.5], [66, -35]];
-    var position = [[-1, -6, 10], [-5.8, 6, 8.14], [-9.45, -2, 3.25], [-9.58, 6, -2.84], [-6.15, -8, -7.88], [-0.436, 2, -9.99], [5.44, 0, -6.38], [9.30, 8, -3.66], [9.70, 0, 2.41], [6.49, -8, 7.6]];
+    var quesDeg = [[-244, -11], [-211, 24], [-181, -10], [-138, 23], [-105, -32], [-72, 1.6], [-26, -9], [1.45, 35], [34, -31], [72, 35]];
+    var position = [[-1, 0, 10], [-5.8, 6, 8.14], [-9.45, -2, 3.25], [-9.58, 6, -2.84], [-6.15, -3, -7.88], [-0.436, 2, -9.99], [5.44, 0, -6.38], [9.30, 8, -3.66], [9.70, -5, 2.41], [6.49, 8, 7.6]];
 
     this.engine.init(document.getElementById("3dPage"));
     //初始化场景
@@ -17,7 +17,7 @@ app.show3DPage = function (texture) {
         map: app.texture
     });
     var mesh = new THREE.Mesh(geometry, material);
-    this.engine.scene.add(mesh);
+    this.engine.addMesh(mesh);
 
     var questions = Utils.getArrayItems(QSData.questions, cardCount);
     //生成答题卡
@@ -29,24 +29,30 @@ app.show3DPage = function (texture) {
         }
 
         var ele = $('<div class="card">' +
-            '<img src="img/card/' + cards[j] + '.png" style="position: absolute">' +
+            '<img src="img/card/' + cards[j] + '.webp" style="position: absolute">' +
             '<div >' +
             '<span>' + (j + 1) + '.' + data.question + '</span>' +
             '<ul >' + resLi + '</ul>' +
-            '<img  src="img/ok.png" ></div>' +
+            '<img  src="img/ok.webp" ></div>' +
             '</div>')[0];
         var btn = $(ele).find("div img")[0]
         $(btn).click(commitResult);
         btn.num = j + 1;
         ele.angle = 360 - j * 35.5;
-        console.log(ele.angle);
+        //console.log(ele.angle);
 
         var y = Math.floor(Math.random() * (4 - (-4) + 1) + -4);
 
 
         // ele.position =  new THREE.Vector3(Math.sin(THREE.Math.degToRad(ele.angle)) * 10, y ,Math.cos(THREE.Math.degToRad(ele.angle)) * 10);
         ele.position = new THREE.Vector3(position[j][0], position[j][1], position[j][2]);
-        ele.rotation = new THREE.Vector3(THREE.Math.degToRad(Utils.getRandomNum(40, -45)), THREE.Math.degToRad(ele.angle + 90), 0);
+        var rx = 0;
+        if(ele.position.y > 0)
+                rx = -5;
+        else if(ele.position.y < 0)
+                rx = 5;
+        ele.rotation = new THREE.Euler(THREE.Math.degToRad(rx), THREE.Math.degToRad( ele.angle-200), 0);
+       //console.log( ele.rotation.y);
         this.engine.makeCSS3DSprite(ele);
         this.elements.push(ele);
     }
@@ -88,12 +94,16 @@ app.show3DPage = function (texture) {
             if (choosenSure[i] > 0) {
                 score += choosenSure[i];
                 if (i == 9) {
+
+                    $('#3dPage').delay(3500).fadeOut(500,function(){
+                        app.result = computeResult();
+                        app.showResultPage();
+                    });
                     new TWEEN.Tween(app.engine.cameraSetting).to({
                         lon: 16000,
                     }, 4000)
                         .easing(TWEEN.Easing.Cubic.In).onComplete(function () {
-                        app.result = computeResult();
-                        app.showResultPage();
+
                     }).start();
                 }
             }
@@ -105,7 +115,6 @@ app.show3DPage = function (texture) {
 
     /**计算成绩*/
     function computeResult() {
-        return QSData.result[1];
         var count = 0, i;
         for (i = 0; i < questions.length; i++) {
             if (questions[i].rightIdx == questions[i].result)
@@ -142,8 +151,8 @@ app.loader = function () {
 /**显示测试结果页*/
 app.showResultPage = function () {
     app.engine.dispose();
-    $("#3dPage").hide();
     $("#resultPage").show();
+
     if (app.result.title != "")
         $("#resTitle").text('你拥有的是"' + app.result.title + '#科学商#"');
     $("#resText").text(app.result.text);
@@ -178,8 +187,8 @@ app.showPSPage = function (sex, photo) {
 
         var num = Utils.getRandomNum(2, 1);
         app.result.sex = sex;
-        $("#ps-bg").attr("src", "img/ps-bg-" + sex + ".png");
-        $("#face").attr("src", "img/ps-face-" + sex + ".png");
+        $("#ps-bg").attr("src", "img/ps-bg-" + sex + ".webp");
+        $("#face").attr("src", "img/ps-face-" + sex + ".webp");
         $("#avatar-ps").attr("class", "face-" + sex + " face");
 
         var text = app.result.text;
@@ -255,7 +264,7 @@ app.showUpPhotoPage = function () {
 app.showSharePage = function (text, title, photo) {
     $("#sharePage").show();
 
-    $("#sharePage .bg").attr("src", "img/share-bg-" + app.result.sex + ".png");
+    $("#sharePage .bg").attr("src", "img/share-bg-" + app.result.sex + ".webp");
     $(".star2 img").attr("src", "img/photo/" + app.result.photo);
     $("#share-face").attr("src", photo);
     $("#share-face").attr("class", (app.result.sex == "men" ? "face-men" : "share-face-women") + " face");

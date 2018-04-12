@@ -46,7 +46,7 @@ var Utils = {
  }
 
  //使用方法
- var imgUrl='img/sun_temple_stripe.jpg';
+ var imgUrl='img/sun_temple_stripe.webp';
  loadImage(imgUrl,function(URI){
  //Do some thing while image is load
  });*/
